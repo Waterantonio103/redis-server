@@ -1,4 +1,5 @@
 #![allow(unused_imports)]
+
 mod parser;
 mod command_handler;
 use std::io::{self, Read, Write};

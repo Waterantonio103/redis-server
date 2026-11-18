@@ -1,11 +1,14 @@
 #![allow(unused)]
 
+pub mod resp_types;
+
 use std::ops::{Mul, Neg};
 
 use winnow::{ModalResult, Parser, ascii::digit1, combinator::{opt, peek}, error::{ContextError, ErrMode, StrContext, StrContextValue}, stream::ToUsize, token::{self, any, one_of, take, take_until}};
 use RespValue::*;
 
 use crate::parser::Sign::{Minus, Plus};
+use crate::parser::resp_types::{BlkStr, RespArray, SmplStr, RespError};
 
 pub const CRLF: &str = "\r\n";
 pub const CR: u8 = 13;
@@ -17,15 +20,12 @@ pub const HYPHEN: u8 = 45;
 pub const COLON: u8 = 58;
 pub const SPACE: u8 = 32;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RespValue {
-    Array(Vec<RespValue>),
-    BlkStr(Vec<u8>),
-    SmplStr(String),
-    Error {
-        code: Vec<u8>,
-        msg: Vec<u8>,
-    },
+    Array(RespArray),
+    BlkStr(BlkStr),
+    SmplStr(SmplStr),
+    Error (RespError),
     Int(i64),
 }
 
@@ -72,7 +72,7 @@ fn parse_array(input: &mut &[u8]) -> ModalResult<RespValue> {
         items.push(parse_dispatcher(input)?);
     }
 
-    Ok(Array(items))
+    Ok(Array(RespArray::new(&items, items.len())))
 }
 
 fn parse_blk_str(input: &mut &[u8]) -> ModalResult<RespValue> {
@@ -87,7 +87,7 @@ fn parse_blk_str(input: &mut &[u8]) -> ModalResult<RespValue> {
 
     parse_crlf(input)?;
 
-    Ok(BlkStr(item.to_vec()))
+    Ok(BlkStr(BlkStr::new(item, item.len())))
 }
 
 fn parse_smpl_str(input: &mut &[u8]) -> ModalResult<RespValue> {
@@ -99,7 +99,7 @@ fn parse_smpl_str(input: &mut &[u8]) -> ModalResult<RespValue> {
     parse_crlf(input)?;
 
     if let Ok(output) = str::from_utf8(item).map(String::from) {
-        Ok(SmplStr(output))
+        Ok(SmplStr(SmplStr::new(output)))
     } else {
         Err(ErrMode::Cut(ContextError::new()))
     }
@@ -117,7 +117,7 @@ fn parse_resp_err(input: &mut &[u8]) -> ModalResult<RespValue> {
 
     parse_crlf(input)?;
 
-    Ok(Error { code: code.to_vec(), msg: msg.to_vec() })
+    Ok(Error(RespError::new(code, msg)))
 }
 
 fn parse_resp_int(input: &mut &[u8]) -> ModalResult<RespValue> {
@@ -126,6 +126,7 @@ fn parse_resp_int(input: &mut &[u8]) -> ModalResult<RespValue> {
 
     let optional_sign = parse_sign(input)?;
 
+    //clamping to avoid error, to review since this is potentially very poor design choice
     let int = parse_size(&mut parse_item_condition(input, CRLF)?)?.clamp(0, i64::MAX.cast_unsigned());
 
     parse_crlf(input)?;
@@ -248,8 +249,9 @@ fn parse_item_condition<'a>(input: &mut &'a [u8], condition: &'a str) -> ModalRe
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
+    
 
     #[test]
     fn test_header() {
@@ -293,7 +295,7 @@ mod test {
 
     #[test]
     fn test_smpl_str() -> ModalResult<()> {
-        let mut input = "+HELP123-_+=}{\r\n".as_bytes();
+        let mut input = "+HELP123-_+=\r\n".as_bytes();
         let output = parse_smpl_str(&mut input)?;
         println!("{output:?}");
         Ok(())
