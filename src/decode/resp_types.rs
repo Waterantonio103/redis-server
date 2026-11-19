@@ -1,6 +1,6 @@
 //associated resp types
 
-use crate::parser::RespValue;
+use crate::decode::RespValue;
 
 #[derive(Debug, Clone)]
 pub struct RespArray {
@@ -12,26 +12,51 @@ impl RespArray {
     pub fn new(data: &[RespValue], length: usize) -> Self {
         Self { data: data.to_vec(), length }
     }
+
+    pub fn iter(&self) -> impl Iterator<Item = &RespValue> {
+        self.data.iter()
+    }
+
+    pub fn get(&self, index: usize) -> Option<&RespValue> {
+        self.data.get(index)
+    }
 }
 
-#[derive(Debug, Clone)]
-pub struct BlkStr {
-    data: Vec<u8>,
-    length: usize,
-}
+impl<'a> IntoIterator for &'a RespArray {
+    type Item = &'a RespValue;
+    type IntoIter = std::slice::Iter<'a , RespValue>;
 
-impl BlkStr {
-    pub fn new(data: &[u8], length: usize) -> Self {
-        Self { data: data.to_vec(), length }
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.iter()
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct SmplStr {
+pub struct BulkString {
+    data: Vec<u8>,
+    length: usize,
+}
+
+impl BulkString {
+    pub fn new(data: &[u8], length: usize) -> Self {
+        Self { data: data.to_vec(), length }
+    }
+
+    pub fn data(&self) ->  &[u8] {
+        &self.data
+    }
+
+    pub fn data_mut(&mut self) -> &mut [u8] {
+        &mut self.data
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct SimpleString {
     data: String,
 }
 
-impl SmplStr {
+impl SimpleString {
     pub fn new(data: String) -> Self {
         Self { data }
     }

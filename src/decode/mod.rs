@@ -1,5 +1,7 @@
 #![allow(unused)]
 
+//need to investigate representing errors
+
 pub mod resp_types;
 
 use std::ops::{Mul, Neg};
@@ -7,8 +9,8 @@ use std::ops::{Mul, Neg};
 use winnow::{ModalResult, Parser, ascii::digit1, combinator::{opt, peek}, error::{ContextError, ErrMode, StrContext, StrContextValue}, stream::ToUsize, token::{self, any, one_of, take, take_until}};
 use RespValue::*;
 
-use crate::parser::Sign::{Minus, Plus};
-use crate::parser::resp_types::{BlkStr, RespArray, SmplStr, RespError};
+use crate::decode::Sign::{Minus, Plus};
+use crate::decode::resp_types::{BulkString, RespArray, SimpleString, RespError};
 
 pub const CRLF: &str = "\r\n";
 pub const CR: u8 = 13;
@@ -23,8 +25,8 @@ pub const SPACE: u8 = 32;
 #[derive(Debug, Clone)]
 pub enum RespValue {
     Array(RespArray),
-    BlkStr(BlkStr),
-    SmplStr(SmplStr),
+    BlkStr(BulkString),
+    SmplStr(SimpleString),
     Error (RespError),
     Int(i64),
 }
@@ -44,10 +46,10 @@ impl Sign {
     }
 }
 
+//main parse function
 pub fn parse(input: &mut &[u8]) -> ModalResult<RespValue> {
     //global parser
-    parse_dispatcher(input)?;
-    todo!()
+    parse_dispatcher(input)
 }
 
 fn parse_dispatcher(input: &mut &[u8]) -> ModalResult<RespValue> {
@@ -87,7 +89,7 @@ fn parse_blk_str(input: &mut &[u8]) -> ModalResult<RespValue> {
 
     parse_crlf(input)?;
 
-    Ok(BlkStr(BlkStr::new(item, item.len())))
+    Ok(BlkStr(BulkString::new(item, item.len())))
 }
 
 fn parse_smpl_str(input: &mut &[u8]) -> ModalResult<RespValue> {
@@ -99,7 +101,7 @@ fn parse_smpl_str(input: &mut &[u8]) -> ModalResult<RespValue> {
     parse_crlf(input)?;
 
     if let Ok(output) = str::from_utf8(item).map(String::from) {
-        Ok(SmplStr(SmplStr::new(output)))
+        Ok(SmplStr(SimpleString::new(output)))
     } else {
         Err(ErrMode::Cut(ContextError::new()))
     }

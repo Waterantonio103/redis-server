@@ -1,9 +1,11 @@
 #![allow(unused_imports)]
 
-mod parser;
-mod command_handler;
+mod decode;
+mod commands;
 use std::io::{self, Read, Write};
 use tokio::{io::AsyncWriteExt, net::{TcpListener, TcpStream}};
+use crate::decode::parse;
+use crate::decode::resp_types::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -21,14 +23,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                         //read input into buf
                         if let Ok(bytes_read) = stream.try_read(&mut buffer) {
                             if bytes_read == 0 { break }
-                            let _input  = &buffer[0..bytes_read];
-                            //parse(input);
+                            let mut input  = &buffer[0..bytes_read];
+                            match parse(&mut input) {
+                                Ok(parsed) => { println!("{parsed:?}") },
+                                Err(e) => { eprintln!("failed to parse input: {e}") }
+                            }
                             // for byte in 0..bytes_read { print!("{} ", buffer[byte]); #[allow(unused_must_use)] io::stdout().flush(); }
                             stream.write_all(b"+PONG\r\n").await.unwrap();
                         }
                     },
                     Err(e) => {
-                        eprintln!("from outer: {e}");
+                        eprintln!("socket error: {e}");
                     }
                 }
             }
