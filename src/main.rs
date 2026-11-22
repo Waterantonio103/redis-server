@@ -27,8 +27,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             match parse(&mut input) {
                                 Ok(parsed) => {
                                     println!("{parsed:?}");
-                                    let response = build_response(&parsed).unwrap();
-                                    println!("{response:?}");
+                                    match build_response(&parsed) {
+                                        Ok(response) => {println!("{response:?}");},
+                                        Err(e) => {
+                                            println!("{e:?}");
+                                        }
+                                    }
                                 },
                                 Err(e) => { eprintln!("failed to parse input: {e}") }
                             }

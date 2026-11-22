@@ -1,0 +1,7 @@
+"filename", "language", "Rust", "comment", "blank", "total"
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/cmd_packager.rs", "Rust", 7, 0, 2, 9
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/command_types.rs", "Rust", 0, 2, 1, 3
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/mod.rs", "Rust", 63, 5, 7, 75
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/decode/resp_types.rs", "Rust", 3, 0, 1, 4
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/main.rs", "Rust", 8, 0, 0, 8
+"Total", "-", 81, 7, 11, 99

@@ -1,0 +1,15 @@
+"filename", "language", "Markdown", "TOML", "YAML", "Rust", "Shell Script", "comment", "blank", "total"
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/.codecrafters/compile.sh", "Shell Script", 0, 0, 0, 0, 2, 7, 3, 12
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/.codecrafters/run.sh", "Shell Script", 0, 0, 0, 0, 2, 7, 3, 12
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/Cargo.lock", "TOML", 0, 408, 0, 0, 0, 2, 58, 468
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/Cargo.toml", "TOML", 0, 11, 0, 0, 0, 0, 2, 13
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 1, 1
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/codecrafters.yml", "YAML", 0, 0, 2, 0, 0, 8, 2, 12
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/cmd_packager.rs", "Rust", 0, 0, 0, 83, 0, 8, 17, 108
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/command_types.rs", "Rust", 0, 0, 0, 31, 0, 2, 7, 40
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/mod.rs", "Rust", 0, 0, 0, 103, 0, 9, 15, 127
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/decode/mod.rs", "Rust", 0, 0, 0, 284, 0, 11, 67, 362
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/decode/resp_types.rs", "Rust", 0, 0, 0, 62, 0, 2, 18, 82
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/main.rs", "Rust", 0, 0, 0, 43, 0, 5, 4, 52
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/your_program.sh", "Shell Script", 0, 0, 0, 0, 6, 15, 4, 25
+"Total", "-", 0, 419, 2, 606, 10, 76, 201, 1314

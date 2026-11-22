@@ -20,7 +20,6 @@ pub struct Echo<'a> {
 }
 
 impl<'a> Echo<'a> {
-    #[deprecated(note="check logic and error cases")]
     pub fn new(msg: &'a BulkString) -> Self {
         Echo { msg }
     }
@@ -37,19 +36,4 @@ impl<'a> Echo<'a> {
     pub fn data_clone(self) -> BulkString {
         self.msg.clone()
     }
-
-    //prolly useless function so wait
-    // pub fn get_expected(&mut self, input: &'a RespArray, index: usize) -> AssignResult<()> {
-    //     if let Some(value) = input.get(index) {
-    //         match value {
-    //             RespValue::BlkStr(blkstr) => { 
-    //                 self.msg = blkstr;
-    //                 return Valid(());
-    //             },
-    //             _ => { return Error(AssignError::InvalidEncoding); },
-    //         }
-    //     } else {
-    //         return Error(AssignError::ArrayIndex);
-    //     }
-    // }
 }

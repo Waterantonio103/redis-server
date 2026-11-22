@@ -26,7 +26,7 @@ pub struct CommandArray {
 }
 
 impl CommandArray {
-    fn new(commands: Vec<CommandWrapper>) -> Self {
+    pub fn new(commands: Vec<CommandWrapper>) -> Self {
         Self { commands }
     }
 
@@ -34,8 +34,24 @@ impl CommandArray {
         self.commands.iter()
     }
 
+    pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut CommandWrapper> {
+        self.commands.iter_mut()
+    }
+
     pub fn into_iter(self) -> impl Iterator<Item = CommandWrapper> {
         self.commands.into_iter()
+    }
+
+    pub fn len(&self) -> usize {
+        self.commands.len()
+    }
+
+    pub fn first_mut(&mut self) -> &mut CommandWrapper {
+        self.commands.get_mut(0).unwrap()
+    }
+
+    pub fn remove(&mut self, index: usize) {
+        self.commands.remove(index);
     }
 }
 
