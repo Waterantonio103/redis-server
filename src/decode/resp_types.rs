@@ -9,12 +9,17 @@ pub struct RespArray {
 }
 
 impl RespArray {
-    pub fn new(data: &[RespValue], length: usize) -> Self {
-        Self { data: data.to_vec(), length }
+    //add logic to check length is correct, be sure to do this everywhere son
+    pub fn new(data: &[RespValue]) -> Self {
+        Self { data: data.to_vec(), length: data.len() }
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &RespValue> {
         self.data.iter()
+    }
+
+    pub fn len(&self) -> usize {
+        self.data.len()
     }
 
     pub fn get(&self, index: usize) -> Option<&RespValue> {
@@ -38,8 +43,8 @@ pub struct BulkString {
 }
 
 impl BulkString {
-    pub fn new(data: &[u8], length: usize) -> Self {
-        Self { data: data.to_vec(), length }
+    pub fn new(data: &[u8]) -> Self {
+        Self { data: data.to_vec(), length: data.len() }
     }
 
     pub fn data(&self) ->  &[u8] {

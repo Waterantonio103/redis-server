@@ -1,63 +1,105 @@
 #![allow(unused)]
+use crate::{commands::{cmd_packager::{CommandArray, CommandWrapper, pkg_resp_val}, command_types::{CommandType, Echo}}, decode::{RespValue, resp_types::{BulkString, RespArray}}};
 
+pub mod cmd_packager;
 pub mod command_types;
 
-use crate::{commands::command_types::{COMMANDS, Command, ECHO, Echo, PING, Ping}, decode::{RespValue::{self, Array, BlkStr, Error, Int, SmplStr}, resp_types::{BulkString, RespArray}}};
+//take original respvalue and packaged command and build based on that
 
-//get a respvalue -> match it to decompose -> match first inputs -> redirect to logic
-//(ex: array(blkstr("echo"), blkstr("hello")) -> cmp/match first blkstr to known command -> redirect to logic of said command )
-
-//handle commands constructed by parser
-pub fn handle_command(cmd: &RespValue) -> Result<(), Box<dyn std::error::Error>> {
-    match cmd {
-        Array(a) => { handle_array(a); },
-        BlkStr(b) => { handle_blk_str(b); },
-        SmplStr(s) => {},
-        Error(e) => {},
-        Int(i) => {},
-    }
-    Ok(())
+#[derive(Debug)]
+pub enum AssignError {
+    UnknownCommand,
+    InvalidEncoding,
+    // ArrayIndex,
+    InvalidStructure,
 }
 
-fn handle_array(array: &RespArray) {
-    for value in array {
-        handle_command(value);
-    }
-    todo!()
+//un-serialized response type
+#[derive(Debug)]
+pub struct Response {
+    data: RespValue
 }
 
-fn handle_blk_str(input: &BulkString) -> Command {
-    //job: look at blkstr and compare it to existing commands
-    let mut command = Command::None;
-    for (index, &command_type) in COMMANDS.iter().enumerate() {
-        if input.data().eq_ignore_ascii_case(command_type) {
-            match COMMANDS[index] {
-                PING => { command = Command::Ping; },
-                ECHO => { command = Command::Echo; },
-                _ => {},
-            }
+impl Response {
+    #[deprecated(note="check logic and error cases")]
+    pub fn new(data: RespValue) -> Self {
+        Response { data }
+    }
+
+    //temporary fn
+    #[deprecated(note="temporary placeholder function -- to be replaced")]
+    pub fn empty() -> Self {
+        Response { data: RespValue::Int(0) }
+    }
+
+    pub fn from_blk_str(input: BulkString) -> Self {
+        Response { data: RespValue::BlkStr(input) }
+    }
+}
+
+pub fn build_response(input: &RespValue) -> Result<Response, AssignError> {
+    if let RespValue::Array(array) = input {
+        dbg!(pkg_resp_val(input));
+        match pkg_resp_val(input) {
+            CommandWrapper::Array(arr) => {
+                return Ok(handle_array(arr, array)?);
+            },
+            CommandWrapper::Cmd(cmd) => {
+                return Ok(handle_cmd(cmd, array)?);
+            },
+            CommandWrapper::Ignore => { return Ok(Response::empty()); },
+        }
+    } else {
+        return Err(AssignError::InvalidStructure)
+    }
+}
+
+fn handle_array(cmd_array: CommandArray, resp_array: &RespArray) -> Result<Response, AssignError> {
+    for cmd_wrap in cmd_array.into_iter() {
+        match cmd_wrap {
+            CommandWrapper::Array(inner_arr) => { return Ok(handle_array(inner_arr, resp_array)?); },
+            CommandWrapper::Cmd(cmd) => {
+                return Ok(handle_cmd(cmd, resp_array)?);
+            },
+            CommandWrapper::Ignore => { return Ok(Response::empty()); },
         }
     }
-    command
+    Ok(Response::empty())
+}
+
+fn handle_cmd(cmd: CommandType, resp_array: &RespArray) -> Result<Response, AssignError> {
+    match cmd {
+        CommandType::Ping => { return Ok(Response::empty()); },
+        CommandType::Echo => {
+            //build response type from echo
+            return Ok(Response::from_blk_str(Echo::from_array(resp_array)?.data_clone()));
+        },
+        CommandType::None => { return Ok(Response::empty()) },
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::decode::resp_types::BulkString;
-
-use super::*;
-
-    #[test]
-    fn test_reffed_respvalue() {
-        let cmd = RespValue::Array(RespArray::new(&[RespValue::BlkStr(BulkString::new(&[0], 1))], 1));
-        let _out = handle_command(&cmd).unwrap();
-    }
+    use crate::decode::resp_types::{BulkString, RespArray};
+    use super::*;
 
     #[test]
-    fn test_blk_str() {
-        let input = BulkString::new("PING".as_bytes(), 4);
-        let output = handle_blk_str(&input);
-        println!("{output:?}");
-        assert!(output==Command::Ping);
+    fn test_pkg() {
+        let input = RespValue::Array(RespArray::new(
+            &[
+                RespValue::BlkStr(BulkString::new("ECHO".as_bytes())),
+                RespValue::BlkStr(BulkString::new("test".as_bytes())),
+            ])
+        );
+        let pkg = pkg_resp_val(&input);
+        println!("{input:?}");
+        println!("{pkg:?}");
+
+        let should_be_empty = RespValue::Int(0);
+        //this scenario handles an empty iterator by still iterating
+        //probable scenario, if its None, return an error
+        should_be_empty.iter().into_iter().flatten().map(|val| {
+            println!("{val:?}");
+        }).for_each(drop);
     }
 }

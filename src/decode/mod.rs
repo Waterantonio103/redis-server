@@ -31,6 +31,15 @@ pub enum RespValue {
     Int(i64),
 }
 
+impl RespValue {
+    pub fn iter(&self) -> Option<impl Iterator<Item = &Self>> {
+        match self {
+            Array(a) => { Some(a.iter()) },
+            _ => { None },
+        }
+    }
+}
+
 #[derive(Debug)]
 enum Sign {
     Plus,
@@ -74,7 +83,7 @@ fn parse_array(input: &mut &[u8]) -> ModalResult<RespValue> {
         items.push(parse_dispatcher(input)?);
     }
 
-    Ok(Array(RespArray::new(&items, items.len())))
+    Ok(Array(RespArray::new(&items)))
 }
 
 fn parse_blk_str(input: &mut &[u8]) -> ModalResult<RespValue> {
@@ -89,7 +98,7 @@ fn parse_blk_str(input: &mut &[u8]) -> ModalResult<RespValue> {
 
     parse_crlf(input)?;
 
-    Ok(BlkStr(BulkString::new(item, item.len())))
+    Ok(BlkStr(BulkString::new(item)))
 }
 
 fn parse_smpl_str(input: &mut &[u8]) -> ModalResult<RespValue> {

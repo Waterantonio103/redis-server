@@ -4,7 +4,7 @@ mod decode;
 mod commands;
 use std::io::{self, Read, Write};
 use tokio::{io::AsyncWriteExt, net::{TcpListener, TcpStream}};
-use crate::decode::parse;
+use crate::{commands::build_response, decode::parse};
 use crate::decode::resp_types::*;
 
 #[tokio::main]
@@ -25,7 +25,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             if bytes_read == 0 { break }
                             let mut input  = &buffer[0..bytes_read];
                             match parse(&mut input) {
-                                Ok(parsed) => { println!("{parsed:?}") },
+                                Ok(parsed) => {
+                                    println!("{parsed:?}");
+                                    let response = build_response(&parsed).unwrap();
+                                    println!("{response:?}");
+                                },
                                 Err(e) => { eprintln!("failed to parse input: {e}") }
                             }
                             // for byte in 0..bytes_read { print!("{} ", buffer[byte]); #[allow(unused_must_use)] io::stdout().flush(); }
