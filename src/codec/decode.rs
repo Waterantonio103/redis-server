@@ -1,17 +1,9 @@
 #![allow(unused)]
-
-//need to investigate representing errors
-
-pub mod resp_types;
-
 use std::ops::{Mul, Neg};
-
 use winnow::{ModalResult, Parser, ascii::digit1, combinator::{opt, peek}, error::{ContextError, ErrMode, StrContext, StrContextValue}, stream::ToUsize, token::{self, any, one_of, take, take_until}};
 use RespValue::*;
-
-use crate::decode::Sign::{Minus, Plus};
-use crate::decode::resp_types::{BulkString, RespArray, SimpleString, RespError};
-
+use crate::codec::decode::Sign::{Minus, Plus};
+use crate::codec::resp_types::{BulkString, RespArray, SimpleString, RespError};
 pub const CRLF: &str = "\r\n";
 pub const CR: u8 = 13;
 pub const LF: u8 = 10;
@@ -109,11 +101,7 @@ fn parse_smpl_str(input: &mut &[u8]) -> ModalResult<RespValue> {
 
     parse_crlf(input)?;
 
-    if let Ok(output) = str::from_utf8(item).map(String::from) {
-        Ok(SmplStr(SimpleString::new(output)))
-    } else {
-        Err(ErrMode::Cut(ContextError::new()))
-    }
+    Ok(SmplStr(SimpleString::new(item)))
 }
 
 fn parse_resp_err(input: &mut &[u8]) -> ModalResult<RespValue> {

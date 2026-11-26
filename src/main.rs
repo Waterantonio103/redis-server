@@ -1,11 +1,11 @@
 #![allow(unused_imports)]
 
-mod decode;
+mod codec;
 mod commands;
 use std::io::{self, Read, Write};
 use tokio::{io::AsyncWriteExt, net::{TcpListener, TcpStream}};
-use crate::{commands::build_response, decode::parse};
-use crate::decode::resp_types::*;
+use crate::{commands::response_builder::build_response, codec::decode::parse};
+use crate::codec::resp_types::*;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {

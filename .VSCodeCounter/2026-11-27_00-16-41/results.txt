@@ -1,0 +1,50 @@
+Date : 2026-11-27 00:16:41
+Directory : /home/Waterantonio103/Documents/codecrafters-redis-rust
+Total : 16 files,  1105 codes, 76 comments, 203 blanks, all 1384 lines
+
+Languages
++--------------+------------+------------+------------+------------+------------+
+| language     | files      | code       | comment    | blank      | total      |
++--------------+------------+------------+------------+------------+------------+
+| Rust         |          9 |        674 |         37 |        130 |        841 |
+| TOML         |          2 |        419 |          2 |         60 |        481 |
+| Shell Script |          3 |         10 |         29 |         10 |         49 |
+| YAML         |          1 |          2 |          8 |          2 |         12 |
+| Markdown     |          1 |          0 |          0 |          1 |          1 |
++--------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                     | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                        |         16 |      1,105 |         76 |        203 |      1,384 |
+| . (Files)                                                                                |          5 |        427 |         25 |         67 |        519 |
+| .codecrafters                                                                            |          2 |          4 |         14 |          6 |         24 |
+| src                                                                                      |          9 |        674 |         37 |        130 |        841 |
+| src (Files)                                                                              |          1 |         43 |          5 |          4 |         52 |
+| src/codec                                                                                |          4 |        344 |         12 |         80 |        436 |
+| src/commands                                                                             |          4 |        287 |         20 |         46 |        353 |
++------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+
+| filename                                                                                 | language     | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/.codecrafters/compile.sh         | Shell Script |          2 |          7 |          3 |         12 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/.codecrafters/run.sh             | Shell Script |          2 |          7 |          3 |         12 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/Cargo.lock                       | TOML         |        408 |          2 |         58 |        468 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/Cargo.toml                       | TOML         |         11 |          0 |          2 |         13 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/README.md                        | Markdown     |          0 |          0 |          1 |          1 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/codecrafters.yml                 | YAML         |          2 |          8 |          2 |         12 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/decode.rs              | Rust         |        279 |         10 |         61 |        350 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/encode.rs              | Rust         |          0 |          0 |          1 |          1 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/mod.rs                 | Rust         |          3 |          0 |          0 |          3 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/resp_types.rs          | Rust         |         62 |          2 |         18 |         82 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/cmd_packager.rs     | Rust         |        101 |          8 |         21 |        130 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/command_types.rs    | Rust         |         34 |          2 |          7 |         43 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/mod.rs              | Rust         |          3 |          0 |          0 |          3 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/response_builder.rs | Rust         |        149 |         10 |         18 |        177 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/src/main.rs                      | Rust         |         43 |          5 |          4 |         52 |
+| /home/Waterantonio103/Documents/codecrafters-redis-rust/your_program.sh                  | Shell Script |          6 |         15 |          4 |         25 |
+| Total                                                                                    |              |      1,105 |         76 |        203 |      1,384 |
++------------------------------------------------------------------------------------------+--------------+------------+------------+------------+------------+

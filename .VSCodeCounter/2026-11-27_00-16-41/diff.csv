@@ -1,0 +1,12 @@
+"filename", "language", "Rust", "comment", "blank", "total"
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/decode.rs", "Rust", 279, 10, 61, 350
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/encode.rs", "Rust", 0, 0, 1, 1
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/mod.rs", "Rust", 3, 0, 0, 3
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/codec/resp_types.rs", "Rust", 62, 2, 18, 82
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/cmd_packager.rs", "Rust", 18, 0, 4, 22
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/command_types.rs", "Rust", 3, 0, 0, 3
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/mod.rs", "Rust", -100, -9, -15, -124
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/commands/response_builder.rs", "Rust", 149, 10, 18, 177
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/decode/mod.rs", "Rust", -284, -11, -67, -362
+"/home/Waterantonio103/Documents/codecrafters-redis-rust/src/decode/resp_types.rs", "Rust", -62, -2, -18, -82
+"Total", "-", 68, 0, 2, 70

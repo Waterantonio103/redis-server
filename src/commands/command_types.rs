@@ -1,4 +1,7 @@
-use crate::{commands::{AssignError}, decode::{RespValue, resp_types::{BulkString, RespArray}}};
+use crate::{
+    commands::{response_builder::{AssignError}}, 
+    codec::{decode::{RespValue}, resp_types::{BulkString, RespArray}}
+};
 
 //when adding commands be sure to check everywhere
 pub const COMMANDS: [&[u8]; 2] = [PING, ECHO];

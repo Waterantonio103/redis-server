@@ -1,6 +1,6 @@
 //associated resp types
 
-use crate::decode::RespValue;
+use crate::codec::decode::RespValue;
 
 #[derive(Debug, Clone)]
 pub struct RespArray {
@@ -58,12 +58,12 @@ impl BulkString {
 
 #[derive(Debug, Clone)]
 pub struct SimpleString {
-    data: String,
+    data: Vec<u8>,
 }
 
 impl SimpleString {
-    pub fn new(data: String) -> Self {
-        Self { data }
+    pub fn new(data: &[u8]) -> Self {
+        Self { data: data.to_vec() }
     }
 }
 

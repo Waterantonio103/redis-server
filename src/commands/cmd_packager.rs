@@ -1,6 +1,12 @@
 #![allow(unused)]
 
-use crate::{commands::command_types::{COMMANDS, CommandType, ECHO, Echo, PING, Ping}, decode::{RespValue::{self, Array, BlkStr, Error, Int, SmplStr}, resp_types::{BulkString, RespArray, RespError, SimpleString}}};
+use crate::{
+    commands::command_types::{COMMANDS, CommandType, ECHO, Echo, PING, Ping}, 
+    codec::{
+        decode::{RespValue::{self, Array, BlkStr, Error, Int, SmplStr}}, 
+        resp_types::{BulkString, RespArray, RespError, SimpleString}
+    }
+};
 
 //get a respvalue -> match it to decompose -> match first inputs -> redirect to logic
 //(ex: array(blkstr("echo"), blkstr("hello")) -> cmp/match first blkstr to known command -> redirect to logic of said command )
@@ -91,7 +97,7 @@ fn pkg_blk_str(input: &BulkString) -> CommandWrapper {
 
 #[cfg(test)]
 mod tests {
-    use crate::decode::resp_types::BulkString;
+    use crate::codec::resp_types::BulkString;
 
 use super::*;
 
